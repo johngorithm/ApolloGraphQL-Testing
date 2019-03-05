@@ -9,6 +9,7 @@ import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 import com.jxw.graphql.service.AppApolloClient;
+import com.jxw.graphql.utils.EspressoIdlingResource;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,16 +29,19 @@ public class MainActivity extends AppCompatActivity {
 
     // Get all Teachers
     public void getAllTeacher() {
+        EspressoIdlingResource.increment();
         AppApolloClient.getAppApolloClient().query(GetAllTeacherQuery.builder().build())
                 .enqueue(new ApolloCall.Callback<GetAllTeacherQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<GetAllTeacherQuery.Data> response) {
                         Log.d("SUCCESS", "onResponse: "+response.data().allTeachers);
-                        runOnUiThread(() -> username.setText(response.data().allTeachers().get(0).name()));
+                        runOnUiThread(() -> username.setText(response.data().allTeachers().get(2).name()));
+                        EspressoIdlingResource.decrement();
                     }
 
                     @Override
                     public void onFailure(@NotNull ApolloException e) {
+                        EspressoIdlingResource.decrement();
                         Log.d("********", "onFailure: "+e.getMessage());
 
                     }
