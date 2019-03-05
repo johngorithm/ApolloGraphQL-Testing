@@ -1,0 +1,8 @@
+query getAllTeacher {
+    allTeachers {
+        id
+        name
+        subject
+        createdAt
+    }
+}
