@@ -1,6 +1,7 @@
 package com.jxw.graphql.service;
 
 import com.apollographql.apollo.ApolloClient;
+import com.jxw.graphql.DemoApplication;
 import com.jxw.graphql.type.CustomType;
 import com.jxw.graphql.utils.CustomDateAdapter;
 
@@ -9,7 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class AppApolloClient {
 
-    private static final String BASE_URL = "https://api.graph.cool/simple/v1/cjs1qws8c0mvr0102fkeosj4p";
 
     /**
      * private constructor.
@@ -24,7 +24,7 @@ public class AppApolloClient {
      * @return expected myApolloClient object.
      */
 
-    public static ApolloClient getAppApolloClient() {
+    public static ApolloClient getAppApolloClient(DemoApplication application) {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -34,11 +34,10 @@ public class AppApolloClient {
                 .build();
 
         return ApolloClient.builder()
-                .serverUrl(BASE_URL)
+                .serverUrl(application.getBaseUrl())
                 .okHttpClient(okHttpClient)
                 .addCustomTypeAdapter(CustomType.DATETIME, new CustomDateAdapter())
                 .build();
-
     }
 }
 
