@@ -1,21 +1,21 @@
 package com.jxw.graphql.service;
 
 import com.apollographql.apollo.ApolloClient;
-import com.jxw.graphql.DemoApplication;
+import com.jxw.graphql.app.DemoApplication;
 import com.jxw.graphql.type.CustomType;
 import com.jxw.graphql.utils.CustomDateAdapter;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public class AppApolloClient {
+public class ApiService {
 
 
     /**
      * private constructor.
      * Utility class
      */
-    private AppApolloClient() {
+    private ApiService() {
 
     }
 

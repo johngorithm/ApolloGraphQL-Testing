@@ -1,4 +1,4 @@
-package com.jxw.graphql;
+package com.jxw.graphql.app;
 
 import android.app.Application;
 

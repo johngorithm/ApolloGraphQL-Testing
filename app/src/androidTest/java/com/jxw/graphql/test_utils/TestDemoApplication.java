@@ -1,6 +1,6 @@
 package com.jxw.graphql.test_utils;
 
-import com.jxw.graphql.DemoApplication;
+import com.jxw.graphql.app.DemoApplication;
 
 public class TestDemoApplication extends DemoApplication {
     private String baseUrl;
