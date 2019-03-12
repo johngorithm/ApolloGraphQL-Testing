@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class CustomDateAdapter implements CustomTypeAdapter<Date> {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     @Override
     public Date decode(@NotNull CustomTypeValue value) {

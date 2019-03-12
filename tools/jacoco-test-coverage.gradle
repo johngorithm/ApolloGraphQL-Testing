@@ -10,10 +10,14 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'conn
             '**/GetAllTeacherQuery*.*',
             '**/Manifest*.*',
             '**/*/Test*.*',
-            'android/**/*.*'
+            'android/**/*.*',
+            'androidx/**/*.*',
+            'io/**/**/*.*',
+            'com/instabug/**/*.*',
+            'com/jxw/graphql/type/*.*'
     ]
     def debugTree = fileTree(dir: "${project.buildDir}/intermediates/javac/debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
-    def mainSrc = "$project.projectDir/app/src/main/java/com/jxw/graphql/"
+    def mainSrc = "$project.projectDir/app/src/main/java/"
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
