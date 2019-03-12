@@ -1,5 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.apollographql.android'
+apply plugin: 'jacoco'
+
+
+apply from: "$project.rootDir/tools/jacoco-test-coverage.gradle"
+
+android.testOptions {
+    unitTests.all {
+        jacoco {
+            includeNoLocationClasses = false
+        }
+    }
+}
 
 android {
     compileSdkVersion 28
@@ -16,6 +28,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled true
         }
     }
     compileOptions {

@@ -7,7 +7,6 @@ import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.rule.ActivityTestRule;
 
-import com.jxw.graphql.test_utils.MockWebServerRule;
 import com.jxw.graphql.test_utils.TestDemoApplication;
 import com.jxw.graphql.utils.EspressoIdlingResource;
 import com.jxw.graphql.view.MainActivity;
@@ -17,7 +16,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.not;
 
 import org.junit.After;
@@ -27,17 +25,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
+import java.io.IOException;
+
 import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.RecordedRequest;
+import okhttp3.mockwebserver.MockWebServer;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class TutorialVersionMainActivityTest {
     private CountingIdlingResource countingIdlingResource = EspressoIdlingResource.getCountIdlingResource();
 
     /**
      * TODO: Move the data containing variables into a data class
      */
-    private static final String MOCK_RESPONSE = "{" +
+    private static final String SUCCESS_RESPONSE = "{" +
             "\"data\":{" +
             "   \"allTeachers\":[" +
             "       {" +
@@ -48,7 +48,7 @@ public class MainActivityTest {
             "           \"createdAt\":\"2019-02-12T14:07:53.000Z\"" +
             "       }," +
             "       {" +
-            "           \"name\":\"Jane Doe\"," +
+            "           \"name\":\"William Smith\"," +
             "           \"subject\":\"SLT101\"," +
             "           \"__typename\":\"Teacher\"," +
             "           \"id\":\"cjs1uixtu1f6g019507d0ksrk\"," +
@@ -93,48 +93,48 @@ public class MainActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, false);
 
-    @Rule
-    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
 
     @Before
     public void setUp() {
         // Espresso Idling Resource registration
         IdlingRegistry.getInstance().register(countingIdlingResource);
-
-        /**
-         * Setting localhost as base url for testing by casting the application context
-         * onto the TestDemoApplication context.
-         */
-        TestDemoApplication app = (TestDemoApplication)
-                InstrumentationRegistry.getTargetContext().getApplicationContext();
-        app.setBaseUrl(mockWebServerRule.server.url("/").toString());
     }
 
     @Test
-    public void testFirstTeacherIsDisplayed() {
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(MOCK_RESPONSE));
+    public void testTeachersAreDisplayed() throws IOException {
+        /**
+         * Setting up mockWebServer at localhost:9900.
+         */
+        MockWebServer server = new MockWebServer();
+        server.start(9900);
+
+        TestDemoApplication testApp = (TestDemoApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
+        testApp.setBaseUrl(server.url("/").toString());
+
+        server.enqueue(new MockResponse().setBody(SUCCESS_RESPONSE));
+
+
         // LAUNCH ACTIVITY
         mainActivityTestRule.launchActivity(null);
         // Actual testing
         onView(withText("John Doe")).check(matches(isDisplayed()));
+        onView(withText("William Smith")).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testSecondTeacherIsDisplayed() {
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(MOCK_RESPONSE));
-        // LAUNCH ACTIVITY
-        mainActivityTestRule.launchActivity(null);
-        // Actual testing
-        onView(withText("Jane Doe")).check(matches(isDisplayed()));
-    }
 
     @Test
-    public void testQueryError() {
+    public void testErrorResponse() throws IOException {
 
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(ERROR_RESPONSE));
+        /**
+         * Setting up mockWebServer at localhost:9900.
+         */
+        MockWebServer server = new MockWebServer();
+        server.start(9900);
+
+        TestDemoApplication testApp = (TestDemoApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
+        testApp.setBaseUrl(server.url("/").toString());
+
+        server.enqueue(new MockResponse().setBody(ERROR_RESPONSE));
         // LAUNCH ACTIVITY
         mainActivityTestRule.launchActivity(null);
         // Actual testing
@@ -143,10 +143,19 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testInvalidResponse() {
+    public void testInvalidResponse() throws IOException {
+        /**
+         * Setting up mockWebServer at localhost:9900
+         */
+        MockWebServer server = new MockWebServer();
+        server.start(9900);
 
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(INVALID_RESPONSE));
+        TestDemoApplication testApp = (TestDemoApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
+        testApp.setBaseUrl(server.url("/").toString());
+
+        server.enqueue(new MockResponse().setBody(INVALID_RESPONSE));
+
+
         // LAUNCH ACTIVITY
         mainActivityTestRule.launchActivity(null);
         // Actual testing
@@ -155,31 +164,6 @@ public class MainActivityTest {
 
     }
 
-    @Test
-    public void testValidRequestPath() throws InterruptedException {
-
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(MOCK_RESPONSE));
-        // LAUNCH ACTIVITY
-        mainActivityTestRule.launchActivity(null);
-
-
-        RecordedRequest recordedRequest = mockWebServerRule.server.takeRequest();
-        assertEquals("/", recordedRequest.getPath());
-        assertEquals("http://localhost:9900/", recordedRequest.getRequestUrl().toString());
-    }
-
-    @Test
-    public void testValidQueryName() throws InterruptedException {
-
-        // Setting local server response
-        mockWebServerRule.server.enqueue(new MockResponse().setBody(MOCK_RESPONSE));
-        // LAUNCH ACTIVITY
-        mainActivityTestRule.launchActivity(null);
-
-        RecordedRequest recordedRequest = mockWebServerRule.server.takeRequest();
-        assertEquals("getAllTeacher", recordedRequest.getHeaders().get("X-APOLLO-OPERATION-NAME"));
-    }
 
     @After
     public void tearDown() {
