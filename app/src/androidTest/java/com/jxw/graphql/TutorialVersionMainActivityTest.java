@@ -119,6 +119,8 @@ public class TutorialVersionMainActivityTest {
         // Actual testing
         onView(withText("John Doe")).check(matches(isDisplayed()));
         onView(withText("William Smith")).check(matches(isDisplayed()));
+
+        server.shutdown();
     }
 
 
@@ -140,6 +142,8 @@ public class TutorialVersionMainActivityTest {
         // Actual testing
         onView(withId(R.id.tv_first_teacher_name)).check(matches(withText("Cannot query field 'subjecta'")));
         onView(withId(R.id.tv_second_teacher_name)).check(matches(not(isDisplayed())));
+
+        server.shutdown();
     }
 
     @Test
@@ -161,6 +165,8 @@ public class TutorialVersionMainActivityTest {
         // Actual testing
         onView(withId(R.id.tv_first_teacher_name)).check(matches(withText("Failed to parse http response")));
         onView(withId(R.id.tv_second_teacher_name)).check(matches(not(isDisplayed())));
+
+        server.shutdown();
 
     }
 
