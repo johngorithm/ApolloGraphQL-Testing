@@ -4,9 +4,11 @@ package com.jxw.graphql;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.rule.ActivityTestRule;
 
+import com.jxw.graphql.R;
 import com.jxw.graphql.test_utils.TestDemoApplication;
 import com.jxw.graphql.utils.EspressoIdlingResource;
 import com.jxw.graphql.view.MainActivity;
@@ -140,7 +142,7 @@ public class TutorialVersionMainActivityTest {
         // LAUNCH ACTIVITY
         mainActivityTestRule.launchActivity(null);
         // Actual testing
-        onView(withId(R.id.tv_first_teacher_name)).check(matches(withText("Cannot query field 'subjecta'")));
+        onView(ViewMatchers.withId(R.id.tv_first_teacher_name)).check(matches(withText("Cannot query field 'subjecta'")));
         onView(withId(R.id.tv_second_teacher_name)).check(matches(not(isDisplayed())));
 
         server.shutdown();
