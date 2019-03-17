@@ -44,7 +44,7 @@ cache:
 
 before_script:
 # Create and start emulator
-- echo no | android create avd --force -n test -t "android-28" --abi $ANDROID_ABI --tag $ANDROID_TAG
+- echo no | android create avd --force -n test -t "android-26" --abi $ANDROID_ABI --tag $ANDROID_TAG
 - emulator -avd test -no-skin -no-audio -no-window &
 - android-wait-for-emulator
 - adb shell input keyevent 82 &
