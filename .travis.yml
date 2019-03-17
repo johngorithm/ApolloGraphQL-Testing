@@ -9,8 +9,6 @@ env:
     - ADB_INSTALL_TIMEOUT=8
 android:
   components:
-    - tools
-    - tools
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
