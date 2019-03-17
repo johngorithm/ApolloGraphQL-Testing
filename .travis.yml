@@ -6,6 +6,7 @@ env:
     - ANDROID_API_LEVEL = 28
     - ANDROID_BUILD_TOOLS_VERSION = 25.0.0
     - CODECOV_TOKEN=${CODECOV_TOKEN}
+    - ADB_INSTALL_TIMEOUT=8
 android:
   components:
     - tools
