@@ -18,6 +18,7 @@ android:
     - build-tools
     - sys-img-x86-android-26
     - sys-img-armeabi-v7a-google_apis-28
+    - sys-img-armeabi-v7a-google_apis-26
     - extra-android-m2repository
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
