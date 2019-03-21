@@ -4,7 +4,7 @@ jdk: oraclejdk8
 env:
   global:
     - ANDROID_API_LEVEL = 28
-    - ANDROID_BUILD_TOOLS_VERSION = 25.0.0
+    - ANDROID_BUILD_TOOLS_VERSION = 25.0.2
     - CODECOV_TOKEN=${CODECOV_TOKEN}
 android:
   components:
@@ -14,14 +14,14 @@ android:
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
-    - build-tools-25.0.0
-    - android-25
+    - build-tools-25.0.2
     - android-24
     - sys-img-armeabi-v7a-android-24
 
 before_install:
   - yes | sdkmanager "platforms;android-27"
   - yes | sdkmanager "platforms;android-28"
+  - yes | sdkmanager "platforms;android-24"
   - pip install --user codecov
 
 before_script:
@@ -31,7 +31,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew check build jacocoTestReport
+  - ./gradlew jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
 
 after_success:
